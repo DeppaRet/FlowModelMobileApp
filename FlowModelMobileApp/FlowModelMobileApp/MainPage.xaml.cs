@@ -15,9 +15,9 @@ namespace FlowModelMobileApp
          InitializeComponent();
       }
 
-      private void Button_OnClicked(object sender, EventArgs e)
+      private void LoginClicked(object sender, EventArgs eventArgs)
       {
-         throw new NotImplementedException();
+         Navigation.PushAsync(new AdminPage());
       }
    }
 }
