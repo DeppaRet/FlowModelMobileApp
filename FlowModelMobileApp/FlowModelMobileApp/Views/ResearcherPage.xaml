@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlowModelMobileApp.Views.ResearcherPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Приветствую Вас, товарищ исследователь!"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Picker x:Name="MaterialPicker" Title="Тип материала" SelectedIndexChanged="MaterialPicker_SelectedIndexChanged"/>
+            <ListView x:Name="PropsView">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.View>
+                                <StackLayout Orientation="Vertical" Spacing="0">
+                                    <Label Text="{Binding Name}" FontSize="10" />
+                                    <Label Text="{Binding Value}" FontSize="8" />
+                                    <Label Text="{Binding Unit}" FontSize="7"/>
+                                </StackLayout>
+                            </ViewCell.View>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace FlowModelMobileApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AdminPage : ContentPage
+    public partial class SimualtionOverviewPAge : ContentPage
     {
-        public AdminPage()
+        public SimualtionOverviewPAge()
         {
             InitializeComponent();
         }
