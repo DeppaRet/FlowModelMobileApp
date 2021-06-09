@@ -1,28 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FlowModelMobileApp.Views.ResearcherPage">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Приветствую Вас, товарищ исследователь!"
-                VerticalOptions="CenterAndExpand" 
+             x:Class="FlowModelMobileApp.Views.ResearcherPage"
+             xmlns:syncfusion="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms">
+<ContentPage.Content>
+        <ScrollView>
+        <StackLayout VerticalOptions="CenterAndExpand">
+                <StackLayout VerticalOptions="CenterAndExpand">
+                <Label Text="Приветствую Вас, товарищ исследователь!"
                 HorizontalOptions="CenterAndExpand" />
             <Picker x:Name="MaterialPicker" Title="Тип материала" SelectedIndexChanged="MaterialPicker_SelectedIndexChanged"/>
-            <ListView x:Name="PropsView">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <ViewCell.View>
-                                <StackLayout Orientation="Vertical" Spacing="0">
-                                    <Label Text="{Binding Name}" FontSize="10" />
-                                    <Label Text="{Binding Value}" FontSize="8" />
-                                    <Label Text="{Binding Unit}" FontSize="7"/>
-                                </StackLayout>
-                            </ViewCell.View>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
+            <syncfusion:SfDataGrid x:Name="PropsGrid" ItemsSource="{Binding Props} "  ColumnSizer="Star"
+            AutoGenerateColumns="True" BackgroundColor="#34C3FF">
+                <syncfusion:SfDataGrid.Columns x:TypeArguments="syncfusion:Columns">
+                    <syncfusion:GridTextColumn HeaderText="Название" 
+                                   MappingName="Name" />
+                    <syncfusion:GridTextColumn HeaderText="Единица измерения"
+                                   MappingName="Unit"  />
+                    <syncfusion:GridTextColumn HeaderText="Значение"
+                                   MappingName="Value"  />
+                </syncfusion:SfDataGrid.Columns>
+            </syncfusion:SfDataGrid>
+                </StackLayout>
+                <StackLayout VerticalOptions="CenterAndExpand">
+                <Label Text="Геометрические параметры канала" />
+            <Entry Placeholder="Ширина(м)" Keyboard="Numeric" Text="0.25" />
+            <Entry Placeholder="Глубина(м)" Keyboard="Numeric" Text="0.01" />
+            <Entry Placeholder="Высота(м)" Keyboard="Numeric" Text="9.5" />
+            <Label Text="Варьируемые параметры канала" />
+                    <Entry Placeholder="Температура крышки(°C)" Keyboard="Numeric" Text="150" />
+                    <Entry Placeholder="Скорость крышки(м/с)" Keyboard="Numeric" Text="1.5"/>
+            <Label Text="Параметры метода решения" />
+                    <Entry Placeholder="Шаг по длине канала(м)" Keyboard="Numeric" Text="0.1"/>
+            <Button Text="Начать моделирование" />
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

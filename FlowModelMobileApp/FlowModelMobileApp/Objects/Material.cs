@@ -6,14 +6,14 @@ namespace FlowModelMobileApp.Objects
 {
     public class Material
     {
-        public string material_name { get; set; }
-        public double t0 { get; set; }
-        public double b { get; set; }
-        public double tr { get; set; }
-        public double n { get; set; }
-        public double alpha_u { get; set; }
-        public double ro { get; set; }
-        public double c { get; set; }
-        public double mu0 { get; set; }
+        public string Material_name { get; set; }
+        public double T0 { get; set; }
+        public double B { get; set; }
+        public double Tr { get; set; }
+        public double N { get; set; }
+        public double Alpha_u { get; set; }
+        public double Ro { get; set; }
+        public double C { get; set; }
+        public double Mu0 { get; set; }
     }
 }

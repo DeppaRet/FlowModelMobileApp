@@ -13,7 +13,7 @@ namespace FlowModelMobileApp
       public App()
       {
          InitializeComponent();
-         MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new MainPage());
       }
 
       public App(string usersPath)
