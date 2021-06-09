@@ -5,6 +5,7 @@ using SQLite;
 
 namespace FlowModelMobileApp
 {
+   [Table("users")]
    public class Users
    {
       [PrimaryKey, AutoIncrement]
