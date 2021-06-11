@@ -2,13 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlowModelMobileApp.Views.AdminPage">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Добро пожаловать, Администратор!"/>
-            <Entry Keyboard="Text" x:Name="LoginText" Placeholder="Логин"></Entry>
-            <Entry Keyboard="Text" x:Name="PasswordText" Placeholder="Пароль"></Entry>
-            <Picker x:Name="RolePicker" Title="Роль" SelectedIndexChanged="RolePicker_OnSelectedIndexChanged_SelectedIndexChanged"/>
-            <Button Text="Добавить" x:Name="AddButton" Clicked="UserAdd"></Button>
+   <ContentPage.Content>
+      <StackLayout>
+         <Label Text="Добро пожаловать, Администратор!"/>
+         <Button Text="Добавить учетную запись" x:Name="AddUser" Clicked="AddUserButtonClick" BackgroundColor="#80CBC4" WidthRequest="300" HorizontalOptions="Center" ></Button>
+
       </StackLayout>
-    </ContentPage.Content>
+   </ContentPage.Content>
 </ContentPage>
