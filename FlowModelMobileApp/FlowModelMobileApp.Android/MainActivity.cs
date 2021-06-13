@@ -16,16 +16,18 @@ namespace FlowModelMobileApp.Droid
       protected override void OnCreate(Bundle savedInstanceState)
       {
          base.OnCreate(savedInstanceState);
-        
+
          Xamarin.Essentials.Platform.Init(this, savedInstanceState);
          global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            OxyPlot.Xamarin.Forms.Platform.Android.PlotViewRenderer.Init();
-            string fileNameUsers = "users.db";
+         OxyPlot.Xamarin.Forms.Platform.Android.PlotViewRenderer.Init();
+         string fileNameUsers = "users.db";
          string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
          string completePathUsers = Path.Combine(folderPath, fileNameUsers);
+         string fileNameModel = "FlowModel.db";
+         folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+         string completePathFlowModel = Path.Combine(folderPath, fileNameModel);
 
-
-         LoadApplication(new App(completePathUsers));
+         LoadApplication(new App(completePathUsers, completePathFlowModel));
       }
 
       public override void OnRequestPermissionsResult(int requestCode, string[] permissions,

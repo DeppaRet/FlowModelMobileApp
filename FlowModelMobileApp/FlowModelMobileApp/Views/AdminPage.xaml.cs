@@ -15,12 +15,17 @@ namespace FlowModelMobileApp.Views
    {
       string currentTable;
       public List<UsersTable> AuthList { get; set; }
+      public List<MaterialsTable> MatList { get; set; }
 
       public class UsersTable
       {
          public string Login { get; set; }
          public string Password { get; set; }
          public string Role { get; set; }
+      }
+      public class MaterialsTable
+      {
+         public string MaterialName { get; set; }
       }
 
       public AdminPage()
@@ -30,6 +35,8 @@ namespace FlowModelMobileApp.Views
          ChoosenTable.Items.Insert(1, "Материалы");
          ChoosenTable.Items.Insert(2, "Свойства");
          ChoosenTable.Items.Insert(3, "Таблица связи");
+         UnitType.Items.Insert(0, "Свойство материала");
+         UnitType.Items.Insert(1, "Эмпирический коэффициент модели");
       }
 
      
@@ -54,6 +61,9 @@ namespace FlowModelMobileApp.Views
          else if (ChoosenTable.SelectedIndex == 1)
          {
             currentTable = "Material";
+            ResultTable.Columns.Clear();
+            ResultTable.Columns.Add(new GridTextColumn() { HeaderText = "Название материала", MappingName = "MaterialName" });
+            selectFromTableMaterials();
          }
       }
 
@@ -72,9 +82,52 @@ namespace FlowModelMobileApp.Views
 
             ResultTable.ItemsSource = AuthList;
          }
-         var height = (ResultTable.View.Records.Count * ResultTable.RowHeight) + ResultTable.HeaderRowHeight;
-         this.ResultTable.HeightRequest = (double)height;
+
          ResultTable.Refresh();
+      }
+
+      async private void MaterialAdd(object sender, EventArgs e)
+      {
+         Materials materials = new Materials()
+         {
+            MaterialName = MaterialNameText.Text
+         };
+         using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
+         {
+            conn.CreateTable<Materials>();
+            int rowsAdded = conn.Insert(materials);
+            await DisplayAlert("Успех", "Материал добавлен успешно!", "OK");
+            MaterialNameText.Text = "";
+         }
+      }
+
+      public void selectFromTableMaterials()
+      {
+         using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
+         {
+            conn.CreateTable<Materials>();
+            var data = conn.Table<Materials>();
+            var materialses = data.ToList();
+            MatList = new List<MaterialsTable>();
+            for (int i = 0; i < materialses.Count; i++)
+            {
+               MatList.Add(new MaterialsTable { MaterialName = materialses[i].MaterialName });
+            }
+
+            ResultTable.ItemsSource = MatList;
+         }
+
+         ResultTable.Refresh();
+      }
+
+      private void AddLinkButton_OnClicked(object sender, EventArgs e)
+      {
+         
+      }
+
+      private void AddPropButton_OnClicked(object sender, EventArgs e)
+      {
+
       }
    }
 }

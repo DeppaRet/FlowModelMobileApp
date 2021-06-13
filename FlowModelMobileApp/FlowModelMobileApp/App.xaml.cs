@@ -10,6 +10,7 @@ namespace FlowModelMobileApp
    {
 
       public static string usersFilePath;
+      public static string flowModelFilePath;
       public App()
       {
          InitializeComponent();
@@ -17,11 +18,12 @@ namespace FlowModelMobileApp
             MainPage = new NavigationPage(new MainPage());
       }
 
-      public App(string usersPath)
+      public App(string usersPath, string flowModelPath)
       {
          InitializeComponent();
          MainPage = new NavigationPage(new MainPage());
          usersFilePath = usersPath;
+         flowModelFilePath = flowModelPath;
       }
 
       protected override void OnStart()
