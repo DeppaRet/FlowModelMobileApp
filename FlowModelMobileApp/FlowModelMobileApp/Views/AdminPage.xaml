@@ -1,12 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xForms="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
              x:Class="FlowModelMobileApp.Views.AdminPage">
    <ContentPage.Content>
       <StackLayout>
          <Label Text="Добро пожаловать, Администратор!"/>
+         <Picker x:Name="ChoosenTable" Title="Таблица" SelectedIndexChanged="ChoosenTableChanged"/>
+         <xForms:SfDataGrid x:Name="ResultTable" ItemsSource="{Binding Props} "  ColumnSizer="Star"
+                                AutoGenerateColumns="True" BackgroundColor="#ffece9">
+            <!--<xForms:SfDataGrid.Columns x:TypeArguments="xForms:Columns">
+               <xForms:GridTextColumn HeaderText="Название" 
+                                          MappingName="Name" />
+               <xForms:GridTextColumn HeaderText="Единица измерения"
+                                          MappingName="Unit"  />
+               <xForms:GridTextColumn HeaderText="Значение"
+                                          MappingName="Value"  />
+            </xForms:SfDataGrid.Columns>-->
+         </xForms:SfDataGrid>
          <Button Text="Добавить учетную запись" x:Name="AddUser" Clicked="AddUserButtonClick" BackgroundColor="#80CBC4" WidthRequest="300" HorizontalOptions="Center" ></Button>
-
       </StackLayout>
    </ContentPage.Content>
 </ContentPage>
