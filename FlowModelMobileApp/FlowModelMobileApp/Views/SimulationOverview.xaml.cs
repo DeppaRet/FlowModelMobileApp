@@ -8,6 +8,9 @@ using Xamarin.Forms.Xaml;
 using Syncfusion.SfChart;
 using System.Collections.ObjectModel;
 using Syncfusion.SfChart.XForms;
+using Syncfusion.SfDataGrid.XForms.Exporting;
+using System.IO;
+using XAMLtoPDF;
 
 namespace FlowModelMobileApp.Views
 {
@@ -72,17 +75,30 @@ namespace FlowModelMobileApp.Views
             canalPoint.t = t_ch[t_ch.Count - 1];
             canalPoint.eta = eta_ch[eta_ch.Count - 1];
             MaterialCondition.Add(canalPoint);
-            PerfomanceLabel.Text = "Производительность (кг/ч):" + Math.Round(q_ch * 3600 * 1380).ToString();
-            TemperatureLabel.Text = "Температура продукта(°C):" + t_prod.ToString();
-            ViscosityLabel.Text = "Вязкость продукта(Па*с):" + eta_prod.ToString();
+            PerfomanceLabel.Text = "Производительность (кг/ч): " + Math.Round(q_ch * 3600 * 1380).ToString();
+            TemperatureLabel.Text = "Температура продукта(°C): " + t_prod.ToString();
+            ViscosityLabel.Text = "Вязкость продукта(Па*с): " + eta_prod.ToString();
             stopwatch.Stop();
-            
+
             T_Chart.ItemsSource = MaterialCondition;
             V_Chart.ItemsSource = MaterialCondition;
             ResultsGrid.ItemsSource = MaterialCondition;
             CalcTime.Text = "Затрачено времени: " + stopwatch.ElapsedMilliseconds.ToString() + " мс";
-            CalcMem.Text = Math.Round((Process.GetCurrentProcess().PeakWorkingSet64 / Math.Pow(1024, 2)), 2).ToString() + " Мб";
+            CalcMem.Text = "Затрачено памяти: " + Math.Round((Process.GetCurrentProcess().PeakWorkingSet64 / Math.Pow(1024, 2)), 2).ToString() + " Мб";
 
+        }
+
+        private void SaveReport_Clicked(object sender, EventArgs e)
+        {
+            //DataGridExcelExportingController excelExport = new DataGridExcelExportingController();
+            //var excelEngine = excelExport.ExportToExcel(this.ResultsGrid);
+            //var workbook = excelEngine.Excel.Workbooks[0];
+            //MemoryStream stream = new MemoryStream();
+            //workbook.SaveAs(stream);
+            //workbook.Close();
+            //excelEngine.Dispose();
+
+            //DependencyService.Get<ISave>().Save("DataGrid.xlsx", "application/msexcel", stream);
         }
 
         static int GetDecimalDigitsCount(double value)

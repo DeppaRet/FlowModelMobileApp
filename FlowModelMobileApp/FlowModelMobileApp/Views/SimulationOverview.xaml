@@ -14,7 +14,7 @@
                 <Label x:Name="PerfomanceLabel" Text="Производительность (кг/ч):" />
                 <Label x:Name="TemperatureLabel" Text="Температура продукта(°C):" />
                 <Label x:Name="ViscosityLabel" Text="Вязкость продукта(Па*с):" />
-                <Button x:Name="SaveReport"  Text="Создать отчет" />
+                <Button x:Name="SaveReport"  Text="Создать отчет" Clicked="SaveReport_Clicked"/>
             </StackLayout>
             <StackLayout>
                 <Label Text="Графическое представление изменения состояния объекта по длине канала" />
