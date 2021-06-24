@@ -5,11 +5,11 @@ using SQLite;
 
 namespace FlowModelMobileApp
 {
-   [Table("material_has_properties")]
+  /* [Table("material_has_properties")]
    public class Material_has_Properties
    {
       Materials MaterialId { get; set; }
       Properties PropertyId { get; set; }
       public double Value { get; set; }
-   }
+   }*/
 }
