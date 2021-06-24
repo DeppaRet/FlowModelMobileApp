@@ -56,16 +56,5 @@ class SaveAndroid : ISave
         {
             exception = e.ToString();
         }
-        if (file.Exists() && contentType != "application/html")
-        {
-            string extension = Android.Webkit.MimeTypeMap.GetFileExtensionFromUrl(Android.Net.Uri.FromFile(file).ToString());
-            string mimeType = Android.Webkit.MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
-            Intent intent = new Intent(Intent.ActionView);
-            intent.SetFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
-            Android.Net.Uri path = FileProvider.GetUriForFile(Forms.Context, Android.App.Application.Context.PackageName + ".provider", file);
-            intent.SetDataAndType(path, mimeType);
-            intent.AddFlags(ActivityFlags.GrantReadUriPermission);
-            Forms.Context.StartActivity(Intent.CreateChooser(intent, "Choose App"));
-        }
     }
 }
