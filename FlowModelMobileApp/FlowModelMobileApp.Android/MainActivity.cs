@@ -4,6 +4,9 @@ using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
+using Android.Content;
+using Java.IO;
+using Xamarin.Forms;
 using Environment = System.Environment;
 
 namespace FlowModelMobileApp.Droid
@@ -37,7 +40,7 @@ namespace FlowModelMobileApp.Droid
 
          base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
       }
+        
 
-
-   }
+    }
 }

@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 using Syncfusion.SfChart.XForms;
 using Syncfusion.SfDataGrid.XForms.Exporting;
 using System.IO;
-using XAMLtoPDF;
+
 
 namespace FlowModelMobileApp.Views
 {
@@ -90,17 +90,17 @@ namespace FlowModelMobileApp.Views
 
         private void SaveReport_Clicked(object sender, EventArgs e)
         {
-            //DataGridExcelExportingController excelExport = new DataGridExcelExportingController();
-            //var excelEngine = excelExport.ExportToExcel(this.ResultsGrid);
-            //var workbook = excelEngine.Excel.Workbooks[0];
-            //MemoryStream stream = new MemoryStream();
-            //workbook.SaveAs(stream);
-            //workbook.Close();
-            //excelEngine.Dispose();
+            DataGridExcelExportingController excelExport = new DataGridExcelExportingController();
+            var excelEngine = excelExport.ExportToExcel(this.ResultsGrid);
+            var workbook = excelEngine.Excel.Workbooks[0];
+            MemoryStream stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            workbook.Close();
+            excelEngine.Dispose();
 
-            //DependencyService.Get<ISave>().Save("DataGrid.xlsx", "application/msexcel", stream);
+            Xamarin.Forms.DependencyService.Get<ISave>().Save("DataGrid.xlsx", "application/msexcel", stream);
         }
-
+        
         static int GetDecimalDigitsCount(double value)
         {
             string[] str = value.ToString(new System.Globalization.NumberFormatInfo() { NumberDecimalSeparator = "." })
