@@ -16,6 +16,8 @@ namespace FlowModelMobileApp.Views
       string currentTable;
       public List<UsersTable> AuthList { get; set; }
       public List<MaterialsTable> MatList { get; set; }
+      public List<PropsTable> PropList { get; set; }
+      public List<LinkTables> LinkList { get; set; }
 
       public class UsersTable
       {
@@ -27,6 +29,18 @@ namespace FlowModelMobileApp.Views
       {
          public string MaterialName { get; set; }
       }
+      public class PropsTable
+      {
+         public string PropertyName { get; set; }
+         public string PropertyUnit { get; set; }
+         public string PropertyType { get; set; }
+      }
+      public class LinkTables
+      {
+         public int MaterialId { get; set; }
+         public int PropertiesId { get; set; }
+         public double Value { get; set; }
+      }
 
       public AdminPage()
       {
@@ -37,9 +51,10 @@ namespace FlowModelMobileApp.Views
          ChoosenTable.Items.Insert(3, "Таблица связи");
          UnitType.Items.Insert(0, "Свойство материала");
          UnitType.Items.Insert(1, "Эмпирический коэффициент модели");
+         updatePickers();
       }
 
-     
+
 
       private void AddUserButtonClick(object sender, EventArgs e)
       {
@@ -64,6 +79,24 @@ namespace FlowModelMobileApp.Views
             ResultTable.Columns.Clear();
             ResultTable.Columns.Add(new GridTextColumn() { HeaderText = "Название материала", MappingName = "MaterialName" });
             selectFromTableMaterials();
+         }
+         else if (ChoosenTable.SelectedIndex == 2)
+         {
+            currentTable = "Properties";
+            ResultTable.Columns.Clear();
+            ResultTable.Columns.Add(new GridTextColumn() { HeaderText = "Название свойства", MappingName = "PropertyName" });
+            ResultTable.Columns.Add(new GridTextColumn() { HeaderText = "Единица измерения", MappingName = "PropertyUnit" });
+            ResultTable.Columns.Add(new GridTextColumn() { HeaderText = "Тип", MappingName = "PropertyType" });
+            selectFromTableProperties();
+         }
+         else if (ChoosenTable.SelectedIndex == 3)
+         {
+            currentTable = "Material_has_properties";
+            ResultTable.Columns.Clear();
+            ResultTable.Columns.Add(new GridTextColumn() { HeaderText = "Номер материала", MappingName = "MaterialId" });
+            ResultTable.Columns.Add(new GridTextColumn() { HeaderText = "Номер свойства", MappingName = "PropertiesId" });
+            ResultTable.Columns.Add(new GridTextColumn() { HeaderText = "Значение", MappingName = "Value" });
+            selectFromTableMaterialHasProperties();
          }
       }
 
@@ -99,6 +132,7 @@ namespace FlowModelMobileApp.Views
             await DisplayAlert("Успех", "Материал добавлен успешно!", "OK");
             MaterialNameText.Text = "";
          }
+         updatePickers();
       }
 
       public void selectFromTableMaterials()
@@ -116,18 +150,122 @@ namespace FlowModelMobileApp.Views
 
             ResultTable.ItemsSource = MatList;
          }
+         ResultTable.Refresh();
+      }
+
+      public void selectFromTableProperties()
+      {
+         using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
+         {
+            conn.CreateTable<Properties>();
+            var data = conn.Table<Properties>();
+            var props = data.ToList();
+            PropList = new List<PropsTable>();
+            for (int i = 0; i < props.Count; i++)
+            {
+               PropList.Add(new PropsTable { PropertyName = props[i].PropertyName, PropertyUnit = props[i].PropertyUnit, PropertyType = props[i].PropertyType});
+            }
+
+            ResultTable.ItemsSource = PropList;
+         }
 
          ResultTable.Refresh();
       }
 
-      private void AddLinkButton_OnClicked(object sender, EventArgs e)
+      public void selectFromTableMaterialHasProperties()
       {
-         
+         using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
+         {
+            conn.CreateTable<Material_has_Properties>();
+            var data = conn.Table<Material_has_Properties>();
+            var props = data.ToList();
+            LinkList = new List<LinkTables>();
+            for (int i = 0; i < props.Count; i++)
+            {
+               LinkList.Add(new LinkTables { MaterialId = props[i].MaterialId, PropertiesId = props[i].PropertiesId, Value = props[i].Value });
+            }
+
+            ResultTable.ItemsSource = LinkList;
+         }
+
+         ResultTable.Refresh();
       }
 
-      private void AddPropButton_OnClicked(object sender, EventArgs e)
+      async private void AddLinkButton_OnClicked(object sender, EventArgs e)
       {
-
+         Material_has_Properties link = new Material_has_Properties()
+         {
+            MaterialId = LinkMaterial.SelectedIndex,
+            PropertiesId = LinkProperties.SelectedIndex,
+            Value = Convert.ToDouble(PropValue.Text)
+         };
+         using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
+         {
+            conn.CreateTable<Material_has_Properties>();
+            int rowsAdded = conn.Insert(link);
+            await DisplayAlert("Успех", "Значение добавлено успешно!", "OK");
+            PropNameText.Text = "";
+            UnitNameText.Text = "";
+         }
       }
+
+
+      private string selectedUnitType;
+      private void UnitType_OnSelectedIndexChanged(object sender, EventArgs e)
+      {
+         if (UnitType.SelectedIndex == 0)
+         {
+            selectedUnitType = "Свойство материала";
+         }
+         if (UnitType.SelectedIndex == 1)
+         {
+            selectedUnitType = "Эмпирический коэффициент модели";
+         }
+      }
+
+
+      async private void AddPropButton_OnClicked(object sender, EventArgs e)
+      {
+         Properties prop = new Properties()
+         {
+            PropertyName = PropNameText.Text,
+            PropertyUnit = UnitNameText.Text,
+            PropertyType = selectedUnitType
+         };
+         using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
+         {
+            conn.CreateTable<Properties>();
+            int rowsAdded = conn.Insert(prop);
+            await DisplayAlert("Успех", "Свойство добавлено успешно!", "OK");
+            PropNameText.Text = "";
+            UnitNameText.Text = "";
+         }
+         updatePickers();
+      }
+
+      public void updatePickers()
+      {
+         LinkProperties.Items.Clear();
+         LinkMaterial.Items.Clear();
+         using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
+         {
+            conn.CreateTable<Materials>();
+            var data = conn.Table<Materials>();
+            var materials = data.ToList();
+            for(int i = 0; i< materials.Count; i++)
+            {
+               LinkMaterial.Items.Insert(i, materials[i].MaterialName);
+            }
+            conn.CreateTable<Properties>();
+            var data2 = conn.Table<Properties>();
+            var properties = data2.ToList();
+            for (int i = 0; i < properties.Count; i++)
+            {
+               LinkProperties.Items.Insert(i, properties[i].PropertyName);
+            }
+           
+         }
+      }
+      
    }
 }
