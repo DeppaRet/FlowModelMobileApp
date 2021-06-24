@@ -27,6 +27,7 @@ namespace FlowModelMobileApp.Views
       }
       public class MaterialsTable
       {
+         public int MaterialId { get; set; }
          public string MaterialName { get; set; }
       }
       public class PropsTable
@@ -77,6 +78,7 @@ namespace FlowModelMobileApp.Views
          {
             currentTable = "Material";
             ResultTable.Columns.Clear();
+            ResultTable.Columns.Add(new GridTextColumn() { HeaderText = "Номер материала", MappingName = "MaterialId" });
             ResultTable.Columns.Add(new GridTextColumn() { HeaderText = "Название материала", MappingName = "MaterialName" });
             selectFromTableMaterials();
          }
@@ -145,7 +147,7 @@ namespace FlowModelMobileApp.Views
             MatList = new List<MaterialsTable>();
             for (int i = 0; i < materialses.Count; i++)
             {
-               MatList.Add(new MaterialsTable { MaterialName = materialses[i].MaterialName });
+               MatList.Add(new MaterialsTable { MaterialId = materialses[i].MaterialId, MaterialName = materialses[i].MaterialName });
             }
 
             ResultTable.ItemsSource = MatList;
@@ -195,8 +197,8 @@ namespace FlowModelMobileApp.Views
       {
          Material_has_Properties link = new Material_has_Properties()
          {
-            MaterialId = LinkMaterial.SelectedIndex,
-            PropertiesId = LinkProperties.SelectedIndex,
+            MaterialId = LinkMaterial.SelectedIndex + 1,
+            PropertiesId = LinkProperties.SelectedIndex + 1,
             Value = Convert.ToDouble(PropValue.Text)
          };
          using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
