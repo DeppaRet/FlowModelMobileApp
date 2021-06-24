@@ -17,8 +17,41 @@ namespace FlowModelMobileApp
          InitializeComponent();
       }
 
+      public void check()
+      {
+         using (SQLiteConnection conn = new SQLiteConnection(App.usersFilePath))
+         {
+            conn.CreateTable<Users>();
+            var data = conn.Table<Users>();
+            var size = data.ToList();
+            int i = size.Count;
+            if (i == 0)
+            {
+               Users users = new Users()
+               {
+                  Login = "admin",
+                  Password = "admin",
+                  Role = "admin"
+               };
+               conn.CreateTable<Users>();
+               int rowsAdded = conn.Insert(users);
+               users = new Users()
+               {
+                  Login = "user",
+                  Password = "user",
+                  Role = "research"
+               };
+               conn.CreateTable<Users>();
+               rowsAdded = conn.Insert(users);
+
+            }
+         }
+
+      }
+
       private void LoginClicked(object sender, EventArgs eventArgs)
       {
+         check();
          string currentRole;
          using (SQLiteConnection conn = new SQLiteConnection(App.usersFilePath))
          {

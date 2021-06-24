@@ -21,12 +21,12 @@
                <Label Text="Добавить новое свойство"></Label>
                <Entry Keyboard="Text" x:Name="PropNameText" Placeholder="Название свойства"></Entry>
                <Entry Keyboard="Text" x:Name="UnitNameText" Placeholder="Единица измерения"></Entry>
-               <Picker x:Name="UnitType" Title="Тип"/>
+               <Picker x:Name="UnitType" Title="Тип" SelectedIndexChanged="UnitType_OnSelectedIndexChanged"/>
                <Button Text="Добавить" x:Name="AddPropButton" Clicked="AddPropButton_OnClicked" BackgroundColor="#80CBC4" WidthRequest="120" HorizontalOptions="Center"></Button>
                <Label Text="Добавить связь свойства и материала и его значение"></Label>
                <Picker x:Name="LinkMaterial" Title="Материал"/>
                <Picker x:Name="LinkProperties" Title="Свойство"/>
-               <Entry Keyboard="Text" x:Name="Value" Placeholder="Значение"></Entry>
+               <Entry Keyboard="Text" x:Name="PropValue" Placeholder="Значение"></Entry>
                <Button Text="Добавить" x:Name="AddLinkButton" Clicked="AddLinkButton_OnClicked" BackgroundColor="#80CBC4" WidthRequest="120" HorizontalOptions="Center"></Button>
             </StackLayout>
          </StackLayout>

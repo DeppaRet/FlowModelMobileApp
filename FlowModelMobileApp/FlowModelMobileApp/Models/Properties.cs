@@ -5,7 +5,7 @@ using SQLite;
 
 namespace FlowModelMobileApp
 {
-   [Table("properties")]
+  /* [Table("properties")]
    public class Properties
    {
       [PrimaryKey, AutoIncrement] 
@@ -14,5 +14,5 @@ namespace FlowModelMobileApp
       public string PropertyUnit { get; set; }
       public string PropertyType { get; set; }
 
-   }
+   }*/
 }
