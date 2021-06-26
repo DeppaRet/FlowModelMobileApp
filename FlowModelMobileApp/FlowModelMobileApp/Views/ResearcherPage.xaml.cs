@@ -1,8 +1,10 @@
 ﻿using FlowModelMobileApp.Objects;
+using Syncfusion.SfDataGrid.XForms.Exporting;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -126,6 +128,7 @@ namespace FlowModelMobileApp.Views
          SimulationObject.Canal.Cap.Tu = Convert.ToDouble(Cap_Temp.Text);
          SimulationObject.Canal.Cap.Vu = Convert.ToDouble(Cap_Speed.Text);
          SimulationObject.Step = Convert.ToDouble(Step.Text);
+         
          Navigation.PushAsync(new SimulationOverview());
       }
 
