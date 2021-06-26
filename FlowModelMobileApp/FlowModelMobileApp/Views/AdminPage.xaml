@@ -26,8 +26,9 @@
                <Label Text="Добавить связь свойства и материала и его значение"></Label>
                <Picker x:Name="LinkMaterial" Title="Материал"/>
                <Picker x:Name="LinkProperties" Title="Свойство"/>
-               <Entry Keyboard="Text" x:Name="PropValue" Placeholder="Значение"></Entry>
+               <Entry Keyboard="Numeric" x:Name="PropValue" Placeholder="Значение"></Entry>
                <Button Text="Добавить" x:Name="AddLinkButton" Clicked="AddLinkButton_OnClicked" BackgroundColor="#80CBC4" WidthRequest="120" HorizontalOptions="Center"></Button>
+               <Button Text="Очистить базу данных" x:Name="Delete" Clicked="Delete_Value" BackgroundColor="Red" WidthRequest="240" HorizontalOptions="Center"></Button>
             </StackLayout>
          </StackLayout>
       </ScrollView>

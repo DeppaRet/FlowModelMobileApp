@@ -45,6 +45,43 @@ namespace FlowModelMobileApp
                rowsAdded = conn.Insert(users);
 
             }
+
+         }
+         using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
+         {
+            conn.CreateTable<Materials>();
+            var data = conn.Table<Materials>();
+            var size = data.ToList();
+            int i = size.Count;
+            if (i == 0)
+            {
+               Materials materials = new Materials()
+               {
+                  MaterialId = 1,
+                  MaterialName = "Поливинилхлорид"
+               };
+               conn.CreateTable<Materials>();
+               conn.Insert(materials);
+               materials = new Materials()
+               {
+                  MaterialId = 2,
+                  MaterialName = "Полипропилен"
+               };
+               conn.CreateTable<Materials>();
+               conn.Insert(materials);
+            }
+            conn.CreateTable<Properties>();
+            var data1 = conn.Table<Properties>();
+            if (data1.ToList().Count == 0)
+            {
+               InsertBasicInfo.InsertProperties();
+            }
+            conn.CreateTable<Material_has_Properties>();
+            var data2 = conn.Table<Material_has_Properties>();
+            if (data2.ToList().Count == 0)
+            {
+               InsertBasicInfo.InsertValues();
+            }
          }
 
       }

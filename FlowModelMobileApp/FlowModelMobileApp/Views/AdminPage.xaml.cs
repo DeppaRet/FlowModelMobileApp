@@ -195,14 +195,17 @@ namespace FlowModelMobileApp.Views
 
       async private void AddLinkButton_OnClicked(object sender, EventArgs e)
       {
-         Material_has_Properties link = new Material_has_Properties()
-         {
-            MaterialId = LinkMaterial.SelectedIndex + 1,
-            PropertiesId = LinkProperties.SelectedIndex + 1,
-            Value = Convert.ToDouble(PropValue.Text)
-         };
          using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
          {
+            var matId = conn.Query<Materials>("Select MaterialId from Materials Where MaterialName = '"+ LinkMaterial.Items[LinkMaterial.SelectedIndex] + "'").ToArray()[0].MaterialId;
+            var propId = conn.Query<Properties>("Select PropertyId from Properties Where PropertyName = '"+ LinkProperties.Items[LinkProperties.SelectedIndex] + "'").ToArray()[0].PropertyId;
+            Material_has_Properties link = new Material_has_Properties()
+            {
+               MaterialId = matId,
+               PropertiesId = propId,
+               Value = Convert.ToDouble(PropValue.Text)
+            };
+
             conn.CreateTable<Material_has_Properties>();
             int rowsAdded = conn.Insert(link);
             await DisplayAlert("Успех", "Значение добавлено успешно!", "OK");
@@ -269,5 +272,19 @@ namespace FlowModelMobileApp.Views
          }
       }
       
+      public void Delete_Value(object sender, EventArgs e)
+      {
+         using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
+         {
+            conn.CreateTable<Material_has_Properties>();
+            conn.Query<Material_has_Properties>("Delete From Material_has_Properties Where MaterialId = 0");
+            conn.CreateTable<Materials>();
+            conn.Query<Materials>("Delete from Materials where MaterialId > 0");
+            conn.CreateTable<Properties>();
+            conn.Query<Properties>("Delete from Properties where PropertyId > 1  ");
+            conn.DropTable<Material_has_Properties>();
+            
+         }
+      }
    }
 }
