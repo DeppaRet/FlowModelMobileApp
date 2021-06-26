@@ -17,6 +17,7 @@ namespace FlowModelMobileApp.Views
    [XamlCompilation(XamlCompilationOptions.Compile)]
    public partial class ResearcherPage : ContentPage
    {
+      bool isFine = true;
       public List<Prop> Props { get; set; }
 
       delegate bool IsEqual(string x);
@@ -45,6 +46,7 @@ namespace FlowModelMobileApp.Views
 
       private void MaterialPicker_SelectedIndexChanged(object sender, EventArgs e)
       {
+         StartSimulation.IsEnabled = true;
          using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
          {
             var matId = conn.Query<Materials>("Select MaterialId from Materials Where MaterialName = '" + MaterialPicker.Items[MaterialPicker.SelectedIndex] + "'").ToArray()[0].MaterialId;
@@ -58,38 +60,6 @@ namespace FlowModelMobileApp.Views
             PropsGrid.ItemsSource = Props;
             PropsGrid.Refresh();
          }
-
-         //if (MaterialPicker.SelectedIndex == 0)
-         //{
-         //   Props = new List<Prop>();
-         //   Props.Add(new Prop {Name = "Плотность", Unit = "кг/м^3", Value = "1380"});
-         //   Props.Add(new Prop {Name = "Удельная теплоемкость", Unit = "Дж/(кг·°С)", Value = "2500"});
-         //   Props.Add(new Prop {Name = "Температура плавления", Unit = "°С", Value = "145"});
-         //   Props.Add(new Prop {Name = "Эмперические коэффиценты", Unit = "Единица измерения", Value = "Значение"});
-         //   Props.Add(new Prop {Name = "Температура приведения", Unit = "°С", Value = "165"});
-         //   Props.Add(new Prop {Name = "Коэффициент консистенции приведения", Unit = "Па·с^n", Value = "12000"});
-         //   Props.Add(new Prop {Name = "Температурный коэффициент вязкости", Unit = "1/°С", Value = "0.05"});
-         //   Props.Add(new Prop {Name = "Индекс течения", Unit = "-", Value = "0.28"});
-         //   Props.Add(new Prop {Name = "Коэффициент теплоотдачи крышки", Unit = "Вт/(м^2·°С)", Value = "400"});
-         //   PropsGrid.ItemsSource = Props;
-         //}
-         //else
-         //{
-         //   Props.Clear();
-         //   PropsGrid.Refresh();
-         //}
-
-         ////dataGridView1.Rows.Add("Плотность", "кг/м^3", "1380");
-         ////dataGridView1.Rows.Add("Удельная теплоемкость", "Дж/(кг·°С)", "2500");
-         ////dataGridView1.Rows.Add("Температура плавления", "°С", "145");
-         ////dataGridView1.Rows.Add("Эмперические коэффиценты", "Единица измерения", "Значение");
-         ////dataGridView1.Rows[dataGridView1.Rows.Count - 2].MinimumHeight = 50;
-         ////dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[2].ReadOnly = true;
-         ////dataGridView1.Rows.Add("Температура приведения", "°С", "165");
-         ////dataGridView1.Rows.Add("Коэффициент консистенции приведения", "Па·с^n", "12000");
-         ////dataGridView1.Rows.Add("Температурный коэффициент вязкости", "1/°С", "0,05");
-         ////dataGridView1.Rows.Add("Индекс течения", "-", "0,28");
-         ////dataGridView1.Rows.Add("Коэффициент теплоотдачи крышки", "Вт/(м^2·°С)", "400");
       }
 
       public class Prop
@@ -101,6 +71,11 @@ namespace FlowModelMobileApp.Views
 
       private void StartSimulation_Clicked(object sender, EventArgs e)
       {
+         checkValues();
+         if (isFine == false)
+         {
+            return;
+         }
          props = new Dictionary<string, double>();
          foreach (Prop prop in Props)
          {
@@ -128,7 +103,7 @@ namespace FlowModelMobileApp.Views
          SimulationObject.Canal.Cap.Tu = Convert.ToDouble(Cap_Temp.Text);
          SimulationObject.Canal.Cap.Vu = Convert.ToDouble(Cap_Speed.Text);
          SimulationObject.Step = Convert.ToDouble(Step.Text);
-         
+
          Navigation.PushAsync(new SimulationOverview());
       }
 
@@ -143,6 +118,134 @@ namespace FlowModelMobileApp.Views
          }
 
          return 0;
+      }
+      async private void checkValues()
+      {
+         isFine = true;
+         try
+         {
+            double val;
+
+            if (Double.TryParse(G_Width.Text, out val))
+            {
+            }
+            else
+            {
+               throw new Exception("Вы ввели текст!\nШирина может быть только числом!");
+            }
+
+            double tmp = Convert.ToDouble(G_Width.Text);
+
+            if (tmp <= 0)
+            {
+               throw new Exception("Значение ширины должно быть больше нуля!");
+            }
+            if (tmp > 100)
+            {
+               throw new Exception("Значение ширины слишком большое!");
+            }
+
+            if (Double.TryParse(G_Depth.Text, out val))
+            {
+            }
+            else
+            {
+               throw new Exception("Вы ввели текст!\nГлубина может быть только числом!");
+            }
+
+            tmp = Convert.ToDouble(G_Depth.Text);
+
+            if (tmp <= 0)
+            {
+               throw new Exception("Значение глубины должно быть больше нуля!");
+            }
+            if (tmp > 1000)
+            {
+               throw new Exception("Значение глубины слишком большое!");
+            }
+            if (Double.TryParse(G_Lenght.Text, out val))
+            {
+            }
+            else
+            {
+               throw new Exception("Вы ввели текст!\nДлина может быть только числом!");
+            }
+
+            tmp = Convert.ToDouble(G_Lenght.Text);
+
+            if (tmp <= 0)
+            {
+               throw new Exception("Значение длины должно быть больше нуля!");
+            }
+            if (tmp > 1000)
+            {
+               throw new Exception("Значение длины слишком большое!");
+            }
+            if (Double.TryParse(Cap_Temp.Text, out val))
+            {
+            }
+            else
+            {
+               throw new Exception("Вы ввели текст!\nТемпература может быть только числом!");
+            }
+
+            tmp = Convert.ToDouble(Cap_Temp.Text);
+
+            if (tmp <= 0)
+            {
+               throw new Exception("Значение температуры должно быть больше нуля!");
+            }
+            if (tmp > 10000)
+            {
+               throw new Exception("Значение температуры слишком большое!");
+            }
+            if (Double.TryParse(Cap_Speed.Text, out val))
+            {
+            }
+            else
+            {
+               throw new Exception("Вы ввели текст!\nСкорость может быть только числом!");
+            }
+
+            tmp = Convert.ToDouble(Cap_Speed.Text);
+
+            if (tmp <= 0)
+            {
+               throw new Exception("Значение скорости должно быть больше нуля!");
+            }
+            if (tmp > 1000)
+            {
+               throw new Exception("Значение скорости слишком большое!");
+            }
+            if (Double.TryParse(Step.Text, out val))
+            {
+            }
+            else
+            {
+               throw new Exception("Вы ввели текст!\nШаг может быть только числом!");
+            }
+
+            tmp = Convert.ToDouble(Step.Text);
+
+            if (tmp <= 0)
+            {
+               throw new Exception("Значение температуры должно быть больше нуля!");
+            }
+            if (tmp <= 0)
+            {
+               throw new Exception("Шаг по длине канала должен быть больше нуля!");
+            }
+
+            if (tmp > Convert.ToDouble(G_Lenght.Text))
+            {
+               throw new Exception("Шаг не может превышать длину канала!");
+            }
+         }
+         catch (Exception ex)
+         {
+            isFine = false;
+            await DisplayAlert("Ошибка", ex.Message, "OK");
+         }
       }
    }
 }

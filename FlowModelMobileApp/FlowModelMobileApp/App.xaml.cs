@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using Xamarin.Forms;
@@ -14,16 +15,17 @@ namespace FlowModelMobileApp
       public App()
       {
          InitializeComponent();
-            
-            MainPage = new NavigationPage(new MainPage());
+         MainPage = new NavigationPage(new MainPage());
       }
 
       public App(string usersPath, string flowModelPath)
       {
          InitializeComponent();
-         MainPage = new NavigationPage(new MainPage());
+         CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en-US"); //ru-RU
+         NumberFormatInfo numberFormatInfo = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
          usersFilePath = usersPath;
          flowModelFilePath = flowModelPath;
+         MainPage = new NavigationPage(new MainPage());
       }
 
       protected override void OnStart()
