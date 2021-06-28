@@ -22,10 +22,7 @@ class SaveAndroid : ISave
         string exception = string.Empty;
         string root = null;
 
-        if (ContextCompat.CheckSelfPermission(Forms.Context, Manifest.Permission.WriteExternalStorage) != Permission.Granted)
-        {
-            ActivityCompat.RequestPermissions((Android.App.Activity)Forms.Context, new String[] { Manifest.Permission.WriteExternalStorage }, 1);
-        }
+
 
         //Get the root path in android device.
         if (Android.OS.Environment.IsExternalStorageEmulated)
@@ -35,9 +32,10 @@ class SaveAndroid : ISave
         else
             root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        //Create directory and file 
-        Java.IO.File myDir = new Java.IO.File(root + "/Syncfusion");
-        myDir.Mkdir();
+
+        //Create directory and file
+        Java.IO.File myDir = new Java.IO.File(root + "/Syncfusion/");
+        myDir.Mkdirs();
 
         Java.IO.File file = new Java.IO.File(myDir, fileName);
 
@@ -51,6 +49,7 @@ class SaveAndroid : ISave
 
             outs.Flush();
             outs.Close();
+
         }
         catch (Exception e)
         {

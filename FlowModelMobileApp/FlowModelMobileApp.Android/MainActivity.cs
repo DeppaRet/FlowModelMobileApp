@@ -1,13 +1,15 @@
-﻿using System;
+﻿
 using System.IO;
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
-using Android.Content;
-using Java.IO;
+
+using AndroidX.Core.Content;
+using Android;
+using AndroidX.Core.App;
 using Xamarin.Forms;
-using Environment = System.Environment;
+using System;
 
 namespace FlowModelMobileApp.Droid
 {
@@ -22,7 +24,6 @@ namespace FlowModelMobileApp.Droid
 
          Xamarin.Essentials.Platform.Init(this, savedInstanceState);
          global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-         OxyPlot.Xamarin.Forms.Platform.Android.PlotViewRenderer.Init();
          string fileNameUsers = "users.db";
          string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
          string completePathUsers = Path.Combine(folderPath, fileNameUsers);
@@ -31,7 +32,15 @@ namespace FlowModelMobileApp.Droid
          string completePathFlowModel = Path.Combine(folderPath, fileNameModel);
 
          LoadApplication(new App(completePathUsers, completePathFlowModel));
-      }
+            if (ContextCompat.CheckSelfPermission(Forms.Context, Manifest.Permission.WriteExternalStorage) != Permission.Granted)
+            {
+                ActivityCompat.RequestPermissions((Android.App.Activity)Forms.Context, new String[] { Manifest.Permission.WriteExternalStorage }, 1);
+            }
+            else if(ContextCompat.CheckSelfPermission(Forms.Context, Manifest.Permission.ReadExternalStorage) != Permission.Granted)
+            {
+                ActivityCompat.RequestPermissions((Android.App.Activity)Forms.Context, new String[] { Manifest.Permission.ReadExternalStorage }, 1);
+            }
+        }
 
       public override void OnRequestPermissionsResult(int requestCode, string[] permissions,
          [GeneratedEnum] Android.Content.PM.Permission[] grantResults)

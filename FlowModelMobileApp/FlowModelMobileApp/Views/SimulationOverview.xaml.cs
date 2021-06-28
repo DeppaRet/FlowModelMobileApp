@@ -159,8 +159,8 @@ namespace FlowModelMobileApp.Views
          DateTime dateTime = DateTime.Now;
          Xamarin.Forms.DependencyService.Get<ISave>().Save($"SimulationResults-{dateTime.Day}-{dateTime.Month}-{dateTime.Year}_{dateTime.Hour}-{dateTime.Minute}.xlsx", "application/msexcel", stream);
 
-         DisplayAlert("Уведомление", "Файл успешно сохранен", "ОK");
-      }
+            DisplayAlert("Уведомление", "Файл успешно сохранен", "ОK");
+        }
 
       static int GetDecimalDigitsCount(double value)
       {

@@ -88,8 +88,8 @@ namespace FlowModelMobileApp
 
       private void LoginClicked(object sender, EventArgs eventArgs)
       {
-         check();
-         string currentRole;
+            check();
+            string currentRole = "";
          using (SQLiteConnection conn = new SQLiteConnection(App.usersFilePath))
          {
             conn.CreateTable<Users>();
@@ -100,7 +100,12 @@ namespace FlowModelMobileApp
                select user.Role);
             currentRole = d1.FirstOrDefault();
          }
-
+            if (currentRole == null) { 
+            DisplayAlert("Предупреждение", "Пользователя с такими входными данными не существует!", "ОK");
+                LoginText.Text = "";
+                PasswordText.Text = "";
+                return;
+            }
          LoginText.Text = "";
          PasswordText.Text = "";
 

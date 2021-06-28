@@ -316,13 +316,13 @@ namespace FlowModelMobileApp.Views
       {
          using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
          {
-            conn.CreateTable<Material_has_Properties>();
+            
             conn.Query<Material_has_Properties>("Delete From Material_has_Properties Where MaterialId = 0");
-            conn.CreateTable<Materials>();
+            
             conn.Query<Materials>("Delete from Materials where MaterialId > 0");
-            conn.CreateTable<Properties>();
+            
             conn.Query<Properties>("Delete from Properties where PropertyId > 0  ");
-            conn.DropTable<Material_has_Properties>();
+            
             
          }
       }
