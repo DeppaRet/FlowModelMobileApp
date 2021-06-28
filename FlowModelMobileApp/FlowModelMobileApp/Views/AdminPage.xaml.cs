@@ -13,6 +13,7 @@ namespace FlowModelMobileApp.Views
    [XamlCompilation(XamlCompilationOptions.Compile)]
    public partial class AdminPage : ContentPage
    {
+      bool isFine = true;
       string currentTable;
       public List<UsersTable> AuthList { get; set; }
       public List<MaterialsTable> MatList { get; set; }
@@ -193,16 +194,58 @@ namespace FlowModelMobileApp.Views
          ResultTable.Refresh();
       }
 
+      async private void checkValue()
+      {
+         isFine = true;
+         try
+         {
+            double val;
+
+            if (Double.TryParse(PropValue.Text, out val))
+            {
+            }
+            else
+            {
+               throw new Exception("Вы ввели текст!\nПрограмный комплекс принимает только числа!");
+            }
+
+            double tmp = Convert.ToDouble(PropValue.Text);
+
+            if (tmp <= 0)
+            {
+               throw new Exception("Значение должно быть больше нуля!");
+            }
+            if (tmp > 20000)
+            {
+               throw new Exception("Значение слишком большое!");
+            }
+
+         }
+         catch (Exception ex)
+         {
+            isFine = false;
+            await DisplayAlert("Ошибка", ex.Message, "OK");
+         }
+      }
+
       async private void AddLinkButton_OnClicked(object sender, EventArgs e)
       {
-         Material_has_Properties link = new Material_has_Properties()
+         checkValue();
+         if (isFine == false) 
          {
-            MaterialId = LinkMaterial.SelectedIndex + 1,
-            PropertiesId = LinkProperties.SelectedIndex + 1,
-            Value = Convert.ToDouble(PropValue.Text)
-         };
+            return;
+         }
          using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
          {
+            var matId = conn.Query<Materials>("Select MaterialId from Materials Where MaterialName = '"+ LinkMaterial.Items[LinkMaterial.SelectedIndex] + "'").ToArray()[0].MaterialId;
+            var propId = conn.Query<Properties>("Select PropertyId from Properties Where PropertyName = '"+ LinkProperties.Items[LinkProperties.SelectedIndex] + "'").ToArray()[0].PropertyId;
+            Material_has_Properties link = new Material_has_Properties()
+            {
+               MaterialId = matId,
+               PropertiesId = propId,
+               Value = Convert.ToDouble(PropValue.Text)
+            };
+
             conn.CreateTable<Material_has_Properties>();
             int rowsAdded = conn.Insert(link);
             await DisplayAlert("Успех", "Значение добавлено успешно!", "OK");
@@ -269,5 +312,41 @@ namespace FlowModelMobileApp.Views
          }
       }
       
+      public void Delete_Value(object sender, EventArgs e)
+      {
+         using (SQLiteConnection conn = new SQLiteConnection(App.flowModelFilePath))
+         {
+            conn.CreateTable<Material_has_Properties>();
+            conn.Query<Material_has_Properties>("Delete From Material_has_Properties Where MaterialId = 0");
+            conn.CreateTable<Materials>();
+            conn.Query<Materials>("Delete from Materials where MaterialId > 0");
+            conn.CreateTable<Properties>();
+            conn.Query<Properties>("Delete from Properties where PropertyId > 0  ");
+            conn.DropTable<Material_has_Properties>();
+            
+         }
+      }
+      public class NumericInput : Entry
+      {
+         public static BindableProperty AllowNegativeProperty = BindableProperty.Create("AllowNegative", typeof(bool), typeof(NumericInput), false, BindingMode.TwoWay);
+         public static BindableProperty AllowFractionProperty = BindableProperty.Create("AllowFraction", typeof(bool), typeof(NumericInput), false, BindingMode.TwoWay);
+
+         public NumericInput()
+         {
+            this.Keyboard = Keyboard.Numeric;
+         }
+
+         public bool AllowNegative
+         {
+            get { return (bool)GetValue(AllowNegativeProperty); }
+            set { SetValue(AllowNegativeProperty, value); }
+         }
+
+         public bool AllowFraction
+         {
+            get { return (bool)GetValue(AllowFractionProperty); }
+            set { SetValue(AllowFractionProperty, value); }
+         }
+      }
    }
 }
