@@ -104,7 +104,7 @@
                     </chart:SfChart >
             </StackLayout>
             <StackLayout>
-                <Label Text="Результаты расчета параметров состояний объекта по длине канала:" />
+                <Label Text="Результаты расчета параметров состояния объекта по длине канала:" />
                     <syncfusion:SfDataGrid x:Name="ResultsGrid" ItemsSource="{Binding MaterialCondition } "  ColumnSizer="Star"
             AutoGenerateColumns="True" BackgroundColor="#ffece9">
                     <syncfusion:SfDataGrid.Columns x:TypeArguments="syncfusion:Columns">
